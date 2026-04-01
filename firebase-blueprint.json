@@ -1,0 +1,98 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores user profile information and roles.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique identifier for the user." },
+        "email": { "type": "string", "format": "email", "description": "User's email address." },
+        "displayName": { "type": "string", "description": "User's full name." },
+        "role": { "type": "string", "enum": ["teacher", "school"], "description": "User's role in the system." },
+        "photoURL": { "type": "string", "format": "uri", "description": "URL to the user's profile picture." },
+        "experience": { "type": "string", "description": "Teacher's professional experience." },
+        "education": { "type": "string", "description": "Teacher's educational background." },
+        "skills": { "type": "array", "items": { "type": "string" }, "description": "Teacher's key skills." },
+        "cvURL": { "type": "string", "format": "uri", "description": "URL to the teacher's uploaded CV." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the profile was created." }
+      },
+      "required": ["uid", "email", "displayName", "role", "createdAt"]
+    },
+    "Job": {
+      "title": "Job Posting",
+      "description": "Stores information about a job posting.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "schoolName": { "type": "string" },
+        "schoolLogo": { "type": "string", "format": "uri" },
+        "location": { "type": "string" },
+        "type": { "type": "string", "enum": ["Full-time", "Part-time", "Contract"] },
+        "salary": { "type": "string" },
+        "startDate": { "type": "string" },
+        "contract": { "type": "string" },
+        "description": { "type": "string" },
+        "responsibilities": { "type": "array", "items": { "type": "string" } },
+        "requirements": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "schoolId", "schoolName", "location", "type", "createdAt"]
+    },
+    "JobAlert": {
+      "title": "Job Alert Subscription",
+      "description": "Stores user preferences for job alerts.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "criteria": {
+          "type": "object",
+          "properties": {
+            "location": { "type": "string" },
+            "jobType": { "type": "string" },
+            "minSalary": { "type": "number" }
+          }
+        },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "email", "criteria", "active", "createdAt"]
+    },
+    "JobApplication": {
+      "title": "Job Application",
+      "description": "Stores information about a job application.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "jobId": { "type": "string" },
+        "userId": { "type": "string" },
+        "schoolName": { "type": "string" },
+        "role": { "type": "string" },
+        "status": { "type": "string", "enum": ["Applied", "Interviewing", "Offer Received", "Rejected"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["jobId", "userId", "schoolName", "role", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Collection of user profiles."
+    },
+    "/jobs/{jobId}": {
+      "schema": "Job",
+      "description": "Collection of job postings."
+    },
+    "/job_alerts/{alertId}": {
+      "schema": "JobAlert",
+      "description": "Collection of job alert subscriptions."
+    },
+    "/applications/{applicationId}": {
+      "schema": "JobApplication",
+      "description": "Collection of job applications."
+    }
+  }
+}
